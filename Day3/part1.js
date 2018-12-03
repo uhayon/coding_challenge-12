@@ -1,21 +1,7 @@
 const { inputArray: claims } = require('./input');
+const { decomposeClaim } = require('./helpers');
 
 const claimedSquares = {};
-
-const decomposeClaim = claim => {
-  const [id, rectangle] = claim.split('@');
-  const [edgesMargin, rectangleSizes] = rectangle.split(':');
-  const [left, top] = edgesMargin.split(',');
-  const [width, height] = rectangleSizes.split('x');
-
-  return {
-    id: parseInt(id.replace('#', '')),
-    leftMargin: parseInt(left),
-    topMargin: parseInt(top),
-    width: parseInt(width),
-    height: parseInt(height)
-  };
-}
 
 const setReclaimedSquares = ({ height, width, topMargin, leftMargin, id }) => {
   for (let i = 0; i < height; i++) {
