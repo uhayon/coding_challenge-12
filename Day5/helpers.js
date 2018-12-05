@@ -16,22 +16,15 @@ const removeReactivePolymers = suit => {
     }
   }
   return suitPolymers;
-  // let i = 0;
-  // while (i < suitPolymers.length) {
-  //   const charIsUpper = suitPolymers[i] === suitPolymers[i].toUpperCase();
-  //   const nextPolymer = suitPolymers[i + 1];
-  //   const currentPolymerToCompare = charIsUpper ? suitPolymers[i].toLowerCase() : suitPolymers[i].toUpperCase();
-  //
-  //   const polymerReact = currentPolymerToCompare === nextPolymer;
-  //   if (polymerReact) {
-  //     suitPolymers.splice(i, 2);
-  //   } else {
-  //     i++;
-  //   }
-  // }
-  // return suitPolymers;
+}
+
+const getPolymersWithoutType = (suit, type) => {
+  const suitPolymers = suit.split('');
+  const filteredPolymers = suitPolymers.filter(polymer => polymer.toLowerCase() !== type && polymer.toUpperCase() !== type.toUpperCase());
+  return filteredPolymers.join('');
 }
 
 module.exports = {
-  removeReactivePolymers
+  removeReactivePolymers,
+  getPolymersWithoutType
 }
