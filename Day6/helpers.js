@@ -64,5 +64,6 @@ const removeInfiniteAreas = field => {
 module.exports = {
   getBoundaries,
   fillField,
-  removeInfiniteAreas
+  removeInfiniteAreas,
+  taxiCabGeometry
 }
