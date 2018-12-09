@@ -29,14 +29,22 @@ const sumNodeMeta = node => {
   let nodeSum = node.entries.reduce((acc, entry) => acc + entry, 0);
   let childrenSum = node.children.reduce((acc, child) => acc + sumNodeMeta(child), 0);
   return nodeSum + childrenSum;
-  // if (node.children.length === 0) {
-  //   return nodeSum;
-  // }
-  //
-  // return nodeSum +
+}
+
+const sumRootMeta = tree => {
+  return sumNodeRootMeta(tree);
+}
+
+const sumNodeRootMeta = node => {
+  if (node.children.length === 0) {
+    return node.entries.reduce((acc, entry) => acc + entry, 0);
+  }
+
+  return node.entries.reduce((acc, entry) => !node.children[entry - 1] ? acc : acc + sumNodeRootMeta(node.children[entry - 1]), 0);
 }
 
 module.exports = {
   buildTree,
-  sumTreeMeta
+  sumTreeMeta,
+  sumRootMeta
 }
