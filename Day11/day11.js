@@ -37,15 +37,17 @@ class FuelCellGrid {
   }
 
   findMaxPowerSubMatrix(subMatrixSize = 3) {
+    console.log(subMatrixSize);
     const maxPower = {
       x: 0,
       y: 0,
+      subSize: subMatrixSize,
       pow: -1
     }
     this.grid.forEach((row, i) => {
-      if (i < 298) {
+      if (i <= (300 - subMatrixSize)) {
         row.forEach((cell, j) => {
-          if (j < 298) {
+          if (j <= (300 - subMatrixSize)) {
             let power = 0;
             for (let x = i; x < (i + subMatrixSize); x++) {
               for (let y = j; y < (j + subMatrixSize); y++) {
@@ -63,10 +65,28 @@ class FuelCellGrid {
       }
     });
 
-    console.log(maxPower);
+    return maxPower;
+  }
+
+  findMaxPowerSubMatrixOfAllSizes() {
+    let maxPower = {
+      x: 0,
+      y: 0,
+      subSize: 0,
+      pow: -1
+    }
+    for (let i = 1; i <= 300; i++) {
+      const subMatrixSizeMaxPow = this.findMaxPowerSubMatrix(i);
+      if (subMatrixSizeMaxPow.pow > maxPower.pow) {
+        maxPower = subMatrixSizeMaxPow;
+      }
+    }
+
+    return maxPower;
   }
 }
 
 const input = 9445;
 const fuelCellGrid = new FuelCellGrid(input);
-fuelCellGrid.findMaxPowerSubMatrix();
+console.log(fuelCellGrid.findMaxPowerSubMatrix());
+console.log(fuelCellGrid.findMaxPowerSubMatrixOfAllSizes()) //{ x: 231, y: 107, subSize: 14, pow: 156 }
