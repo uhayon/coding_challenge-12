@@ -7,9 +7,10 @@ class Underground {
   }
 
   getPotNumbersSum() {
+    console.log(this.offset);
     return this.state
       .split('')
-      .map((pot, i) => pot === '#' ? i - this.offset : 0)
+      .map((pot, i) => pot === '#' ? this.offset + i : 0)
       .reduce((acc, pot) => acc + pot);
   }
 
@@ -45,18 +46,20 @@ class Underground {
 
       let [firstIndexOccupiedPot, lastIndexOccupiedPot] = [newState.indexOf('#') - 1, newState.lastIndexOf('#') + 1];
       if (firstIndexOccupiedPot === newState.length) {
-        newState = '';
+        newState = '.';
         offset = 0;
       } else {
         newState = newState.substr(firstIndexOccupiedPot, lastIndexOccupiedPot - firstIndexOccupiedPot + 1);
-        offset = offset - 2 + firstIndexOccupiedPot;
+        offset = this.offset - 2 + firstIndexOccupiedPot;
       }
 
       if (newState === this.state) break;
 
       this.state = newState;
+      this.offset = offset;
     }
-    this.offset = offset + (offset - this.offset) * (years - i);
+    console.log(this.offset, offset, years, i);
+    this.offset = offset + (offset - this.offset) * (years - i + 1);
   }
 
   showState() {
