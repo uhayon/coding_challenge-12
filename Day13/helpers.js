@@ -1,29 +1,32 @@
-const carts = ['<', '>', '^', 'v'];
-const takeCarts = map => {
-  const carts = [];
+const { contains } = require('../utils');
+const { CARTS_DIRECTIONS, MAP_CART_REPLACEMENT } = require('./constants')
 
-  for (let i = 0; i < map.length; i++) {
-    for (let j = 0; j < map[i].length; j++) {
-      if (carts.contains(map[i][j])) {
-        carts.push(getCartOptions(map, i, j));
-        map[i][j] = getMapTrack(map, i, j);
-      }
+const takeCarts = map => {
+  const cartsOptions = [];
+  map = map.map((row, y) => row.map((cell, x) => {
+    if (contains(CARTS_DIRECTIONS, map[y][x])) {
+      cartsOptions.push(getCartOptions(map, y, x));
+      return MAP_CART_REPLACEMENT[cell];
     }
-  }
+
+    return cell;
+  }));
+
+  return [map, cartsOptions];
 }
 
-const getCartOptions = (map, x, y) => {
+const getCartOptions = (map, y, x) => {
   return {
-    currentDirection: map[x][y],
+    direction: map[y][x],
     position: { x, y }
   };
 }
 
-const getMapTrack = (map, x, y) => {
-  const [left, right, top, bottom] = [map[x][y-1], map[x][y+1], map[x-1][y], map[x+1][y]];
-  
+const cartsCrashed = (currentCart, previousCart) => {
+  return currentCart.position.y === previousCart.position.y && currentCart.position.x === previousCart.position.x;
 }
 
 module.exports = {
-  takeCarts
+  takeCarts,
+  cartsCrashed
 }
