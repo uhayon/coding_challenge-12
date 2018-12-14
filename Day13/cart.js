@@ -13,6 +13,7 @@ class Cart {
     this.position = position;
     this.direction = direction;
     this.intersectionNextTurn = LEFT;
+    this.crashed = false;
   }
 
   move(mapTrack) {

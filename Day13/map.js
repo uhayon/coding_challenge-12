@@ -13,38 +13,30 @@ class Map {
   }
 
   moveCarts() {
-    this.sortCarts();
-    for (let i = this.carts.length - 1; i >= 0; i--) {
-      const cart = this.carts[i];
+    const carts = this.sortCarts(this.carts);
+    for (let i = carts.length - 1; i >= 0; i--) {
+      const cart = carts[i];
       const { x, y } = cart.position;
       cart.move(this.map[y][x]);
 
+      const cartsInPosition = carts.filter((cartToFilter, index) => cartToFilter.position.y === cart.position.y && cart.position.x === cartToFilter.position.x);
 
-      const crashedCartsIndexes = {};
-      const crashedCarts = this.carts.filter((cartToFilter, index) => {
-        const crashed = cartToFilter.position.y === cart.position.y && cart.position.x === cartToFilter.position.x;
-        if (crashed) {
-          crashedCartsIndexes[index] = cartToFilter;
-        }
-        return crashed;
-      });
-      if (crashedCarts.length >= 2) {
-        const crash = {
-          position: { x: cart.position.x, y: cart.position.y },
-          carts: []
-        }
-
-        for (let crashedCartIndex in crashedCartsIndexes) {
-          crash.carts.push(this.carts.splice(crashedCartIndex, 1));
-        }
-        this.crashes.push(crash);
-        i-= 2;
+      if (cartsInPosition.length >= 2) {
+        cartsInPosition.forEach(cartCrashed => cartCrashed.crashed = true);
       }
     }
+    this.removeCrashedCarts();
   }
 
-  sortCarts() {
-    this.carts = this.carts.sort((firstCart, secondCart) => {
+  removeCrashedCarts() {
+    const crashedCarts = this.sortCarts(this.carts.filter(cart => cart.crashed));
+    this.crashes = [...this.crashes, ...crashedCarts];
+
+    this.carts = this.carts.filter(cart => !cart.crashed);
+  }
+
+  sortCarts(carts) {
+    return carts.sort((firstCart, secondCart) => {
       if (firstCart.position.y !== secondCart.position.y) {
         return secondCart.position.y - firstCart.position.y;
       }
